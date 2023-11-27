@@ -45,7 +45,7 @@ Install dependencies
   npm install
 ```
 
-Edit .env.example file and rename it to .env
+Edit `.env.example` file and rename it to `.env`
 ```bash
   DATABASE_URL="POSTGRESQL CONNECTION STRING GOES HERE"
   JWT_SECRET="JWT SECRET GOES HERE"
