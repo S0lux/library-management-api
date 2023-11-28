@@ -9,7 +9,7 @@ export async function GET(req: NextRequest) {
     // Authentication with JWT
     try {
         payload = verifyToken(jwtToken)
-        console.log(payload)
+        if (!payload.username) throw new Error
     }
     catch {
         return NextResponse.json({ error: "Unauthorized" }, { status: 401 })

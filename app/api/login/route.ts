@@ -14,6 +14,8 @@ export async function POST(req: NextRequest) {
         const body = await req.json()
         username = body.username
         password = body.password
+        
+        if (!username || !password) throw new Error
     }
     catch {
         return NextResponse.json({ error: "Bad request" }, { status: 400 })
