@@ -14,4 +14,5 @@ model Employee {
   id String @id
   username String @unique
   password String
+  khang String?
 }
