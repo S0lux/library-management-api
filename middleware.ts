@@ -13,7 +13,6 @@ export async function middleware(request: NextRequest) {
         if (!payload.username) throw new Error
     }
     catch (error) {
-        console.log(error)
         return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
     }
 

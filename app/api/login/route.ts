@@ -12,7 +12,6 @@ export async function POST(req: NextRequest) {
     // Check if request body contains username and password fields
     try {
         const body = await req.json()
-        console.log(body)
         username = body.username
         password = body.password
         
