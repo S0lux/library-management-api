@@ -1,18 +1,19 @@
-const JWT_SECRET = process.env.JWT_SECRET
-const jwt = require("jsonwebtoken")
+const JWT_SECRET = new TextEncoder().encode(process.env.JWT_SECRET)
+const jose = require("jose")
+const alg = 'HS256'
 
-const jwtConfig = {
-    expiresIn: "3 days"
-}
-
-export function generateToken(username: String) {
-    const token = jwt.sign({ username: username }, JWT_SECRET, jwtConfig)
+export async function generateToken(username: String) {
+    const token = await new jose.SignJWT({ username: username })
+                                .setProtectedHeader({ alg })
+                                .setIssuedAt()
+                                .setExpirationTime('3d')
+                                .sign(JWT_SECRET)
     return token
 }
 
-export function verifyToken(token?: String) {
+export async function verifyToken(token?: String) {
     if (token) {
-        const payload = jwt.verify(token, JWT_SECRET)
+        const { payload } = await jose.jwtVerify(token, JWT_SECRET)
         return payload
     }
     throw new Error
