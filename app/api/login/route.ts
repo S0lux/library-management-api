@@ -37,11 +37,8 @@ export async function POST(req: NextRequest) {
     // Return JWT token
     const token = await generateToken(username)
     const response = {
+        username: employee.username,
         token: token,
-        user: {
-            id: employee.id,
-            username: employee.username
-        }
     }
 
     return NextResponse.json(response, { status: 200 })

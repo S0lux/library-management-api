@@ -16,7 +16,16 @@ export async function middleware(request: NextRequest) {
         return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
     }
 
-    return NextResponse.next()
+    // Create a new header
+    const newHeader = new Headers(request.headers)
+    newHeader.set("username", payload.username)
+    newHeader.set("token", jwtToken!)
+
+    return NextResponse.next({
+        request: {
+            headers: newHeader,
+        },
+    })
 }
  
 export const config = {
