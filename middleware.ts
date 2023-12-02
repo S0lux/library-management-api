@@ -5,6 +5,7 @@ import { verifyToken } from './utils/jwtHandler'
 export async function middleware(request: NextRequest) {
 
     const jwtToken = request.headers.get("Authorization")?.split(" ")[1]
+    console.log("Token: " + jwtToken)
     let payload
 
     // Authentication with JWT
