@@ -23,10 +23,10 @@ export async function POST(req: NextRequest) {
 
     // Check if the login credential exists in the database
     try {
-        employee = await prisma.employee.findFirstOrThrow({
+        employee = await prisma.account.findFirstOrThrow({
             where: {
-                username: username,
-                password: password
+                Username: username,
+                Password: password
             }
         })
     }
@@ -35,9 +35,9 @@ export async function POST(req: NextRequest) {
     }
 
     // Return JWT token
-    const token = await generateToken(username)
+    const token = await generateToken(employee.Username)
     const response = {
-        username: employee.username,
+        username: employee.Username,
         token: token,
     }
 
