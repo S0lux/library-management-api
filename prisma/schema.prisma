@@ -10,8 +10,117 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Employee {
-  id String @id
-  username String @unique
-  password String
+model Member {
+  MemberID Int @id @default(autoincrement())
+  CitizenID Int @unique
+  Name String
+  Address String
+  PhoneNumber String
+  Credit Int
+  DateOfBirth DateTime
+  Gender Boolean  
+
+  Employee Employee @relation(fields: [EmployeeID], references: [EmployeeID])
+  EmployeeID Int
+
+  BorrowInvoices BorrowInvoice[]
 }
+
+model Employee {
+  EmployeeID Int @id @default(autoincrement())
+  Name String
+  Address String
+  PhoneNumber String
+  DateOfBirth DateTime
+  Gender Boolean
+
+  Account Account?
+  Member Member[]
+  BorrowInvoices BorrowInvoice[]
+  ChangeInvoices ChangeInvoice[]
+}
+
+model Account {
+  AccountID Int @id @default(autoincrement())
+  Username String @unique 
+  Password String
+  AccessLevel Int
+
+  Owner Employee @relation(fields: [OwnerID], references: [EmployeeID])
+  OwnerID Int @unique
+}
+
+model Book {
+  BookID Int @id @default(autoincrement())
+  ISBN String @unique
+  Title String
+  Author String
+  ReleaseDate DateTime
+  Genre String
+  Price Float
+
+  BookDetails BookDetail[]
+  BorrowDetails BorrowDetail[]
+  ChangeDetails ChangeDetail[]
+}
+
+model BookDetail {
+  Status String 
+  Quantity Int
+
+  Book Book @relation(fields: [BookID],references: [BookID])
+  BookID Int @unique
+
+  @@id([Status,BookID])
+}
+
+model BorrowInvoice {
+  BorrowInvoiceID Int @id @default(autoincrement())
+  BorrowingDate DateTime
+
+  Member Member @relation(fields: [MemberID], references: [MemberID])
+  MemberID Int  
+
+  Employee Employee @relation(fields:[EmployeeID], references: [EmployeeID])
+  EmployeeID Int 
+
+  BorrowDetails BorrowDetail[]
+}
+
+model BorrowDetail {
+  Quantity Int
+  DueDate DateTime
+
+  BorrowInvoice BorrowInvoice @relation(fields: [BorrowInvoiceID], references: [BorrowInvoiceID])
+  BorrowInvoiceID Int 
+
+  Book Book @relation(fields: [BookID], references: [BookID])
+  BookID Int 
+
+  @@id([BorrowInvoiceID,BookID]) 
+}
+
+model ChangeInvoice {
+  ChangeInvoiceID Int @id @default(autoincrement())
+  ChangeDate DateTime
+
+  Employee Employee @relation(fields: [EmployeeID], references: [EmployeeID])
+  EmployeeID Int
+
+  ChangeDetail ChangeDetail[]
+}
+
+model ChangeDetail {
+  Partner String
+  Quantity Int
+  ChangeType Int
+
+  Book Book @relation(fields: [BookID], references: [BookID])
+  BookID Int
+
+  ChangeInvoice ChangeInvoice @relation(fields: [ChangeInvoiceID], references: [ChangeInvoiceID])
+  ChangeInvoiceID Int
+  
+  @@id([BookID,ChangeInvoiceID])
+}
+
