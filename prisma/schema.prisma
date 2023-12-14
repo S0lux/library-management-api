@@ -33,6 +33,8 @@ model Employee {
   PhoneNumber String
   DateOfBirth DateTime
   Gender Boolean
+  Email String
+  CitizenID String
 
   Account Account?
   Member Member[]
