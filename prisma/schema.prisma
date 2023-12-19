@@ -18,7 +18,7 @@ model Member {
   PhoneNumber String
   Credit Int
   DateOfBirth DateTime
-  Gender Boolean  
+  Gender Int  
 
   Employee Employee @relation(fields: [EmployeeID], references: [EmployeeID])
   EmployeeID Int
@@ -32,7 +32,7 @@ model Employee {
   Address String
   PhoneNumber String
   DateOfBirth DateTime
-  Gender Boolean
+  Gender Int
   Email String
   CitizenID String
 
