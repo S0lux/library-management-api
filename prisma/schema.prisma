@@ -12,7 +12,7 @@ datasource db {
 
 model Member {
   MemberID Int @id @default(autoincrement())
-  CitizenID Int @unique
+  CitizenID String @unique
   Name String
   Address String
   PhoneNumber String

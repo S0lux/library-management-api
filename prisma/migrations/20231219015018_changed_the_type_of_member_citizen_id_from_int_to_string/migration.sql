@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE "Member" ALTER COLUMN "CitizenID" SET DATA TYPE TEXT;
