@@ -40,7 +40,7 @@ export async function PUT(req: NextRequest) {
 
         const response = await prisma.member.update({
             where: {
-                MemberID: memberData.memberID
+                MemberID: memberData.MemberID
             },
             data: memberData
         })
