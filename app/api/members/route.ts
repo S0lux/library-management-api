@@ -12,7 +12,7 @@ export async function GET(req: NextRequest) {
         return NextResponse.json(response, { status: 200 })
     }
     catch {
-        return NextResponse.json({ error: "Unknown error" }, { status: 501 })
+        return NextResponse.json({ error: "Unknown error" }, { status: 500 })
     }
 }
 
@@ -29,7 +29,7 @@ export async function POST(req: NextRequest) {
     }
     catch (error) {
         console.log(error)
-        return NextResponse.json({ error: "Unknown error" }, { status: 501 })
+        return NextResponse.json({ error: "Unable to create a new member using the member object provided" }, { status: 400 })
     }
 }
 
@@ -49,7 +49,7 @@ export async function PUT(req: NextRequest) {
     }
     catch (error) {
         console.log(error)
-        return NextResponse.json({ error: "Unknown error" }, { status: 501 })
+        return NextResponse.json({ error: "Unable to update a member using the member object provided" }, { status: 400 })
     }
 }
 
@@ -68,6 +68,6 @@ export async function DELETE(req: NextRequest) {
     }
     catch (error) {
         console.log(error)
-        return NextResponse.json({ error: "Unknown error" }, { status: 501 })
+        return NextResponse.json({ error: "Invalid memberID provided" }, { status: 404 })
     }
 }
