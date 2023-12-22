@@ -53,8 +53,7 @@ model Account {
 }
 
 model Book {
-  ISBN10 String @unique @id
-  ISBN13 String @unique
+  ISBN13 String @unique @id
   Title String
   Author String
   PublishDate DateTime

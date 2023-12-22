@@ -11,7 +11,7 @@ export async function POST(request: NextRequest) {
     try {
         book = (await request.json()).data
 
-        const requiredProperties = ["ISBN10", "ISBN13", "PublishDate", "Title", "Author"];
+        const requiredProperties = ["ISBN13", "PublishDate", "Title", "Author"];
         const missingProperties = requiredProperties.filter(prop => !book[prop]);
 
         if (missingProperties.length > 0) return NextResponse.json(
@@ -26,7 +26,6 @@ export async function POST(request: NextRequest) {
     try {
         const exists = await prisma.book.findFirst({
             where: {
-                ISBN10: book.ISBN10,
                 ISBN13: book.ISBN13
             }
         })

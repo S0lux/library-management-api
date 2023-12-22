@@ -30,7 +30,6 @@ export async function GET(request: NextRequest, { params }: { params: { isbn_str
 
     const responseData: { data: book } = {
         data : {
-            ISBN10: bookResultJson.isbn_10?.[0],
             ISBN13: bookResultJson.isbn_13[0],
             PublishDate: new Date(bookResultJson.publish_date).toISOString(),
             Title: bookResultJson.title,
