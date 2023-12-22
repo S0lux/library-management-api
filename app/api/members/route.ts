@@ -52,22 +52,3 @@ export async function PUT(req: NextRequest) {
         return NextResponse.json({ error: "Unable to update a member using the member object provided" }, { status: 400 })
     }
 }
-
-export async function DELETE(req: NextRequest) {
-    try {
-        const body = await req.json();
-        const memberData = body.data;
-
-        const response = await prisma.member.delete({
-            where: {
-                MemberID: memberData.MemberID
-            }
-        })
-
-        return NextResponse.json(response, { status: 200 })
-    }
-    catch (error) {
-        console.log(error)
-        return NextResponse.json({ error: "Invalid memberID provided" }, { status: 404 })
-    }
-}
