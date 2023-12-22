@@ -6,7 +6,7 @@ const prisma = new PrismaClient();
 export async function GET(req: NextRequest) {
     try {
         const response = {
-            data: await prisma.member.findMany()
+            data: await prisma.member.findMany({where: {Deleted: false}})
         }
 
         return NextResponse.json(response, { status: 200 })

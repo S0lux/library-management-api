@@ -5,11 +5,13 @@ const prisma = new PrismaClient();
 
 export async function DELETE(req: NextRequest, { params }: { params: { memberID: string } }) {
     try {
-        const body = await req.json();
 
-        const response = await prisma.member.delete({
+        const response = await prisma.member.update({
             where: {
                 MemberID: Number.parseInt(params.memberID)
+            },
+            data: {
+                Deleted: true
             }
         })
 
