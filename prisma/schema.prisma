@@ -54,13 +54,12 @@ model Account {
 
 model Book {
   BookID Int @id @default(autoincrement())
-  ISBN String @unique
+  ISBN10 String @unique
+  ISBN13 String @unique
   Title String
   Author String
-  ReleaseDate DateTime
-  Genre String
-  Price Float
-
+  PublishDate DateTime
+  
   BookDetails BookDetail[]
   BorrowDetails BorrowDetail[]
   ChangeDetails ChangeDetail[]
