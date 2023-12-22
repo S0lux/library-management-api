@@ -53,13 +53,12 @@ model Account {
 }
 
 model Book {
-  BookID Int @id @default(autoincrement())
-  ISBN10 String @unique
+  ISBN10 String @unique @id
   ISBN13 String @unique
   Title String
   Author String
   PublishDate DateTime
-  
+
   BookDetails BookDetail[]
   BorrowDetails BorrowDetail[]
   ChangeDetails ChangeDetail[]
@@ -69,10 +68,10 @@ model BookDetail {
   Status String 
   Quantity Int
 
-  Book Book @relation(fields: [BookID],references: [BookID])
-  BookID Int @unique
+  Book Book @relation(fields: [ISBN13],references: [ISBN13])
+  ISBN13 String @unique
 
-  @@id([Status,BookID])
+  @@id([Status,ISBN13])
 }
 
 model BorrowInvoice {
@@ -95,10 +94,10 @@ model BorrowDetail {
   BorrowInvoice BorrowInvoice @relation(fields: [BorrowInvoiceID], references: [BorrowInvoiceID])
   BorrowInvoiceID Int 
 
-  Book Book @relation(fields: [BookID], references: [BookID])
-  BookID Int 
+  Book Book @relation(fields: [ISBN13], references: [ISBN13])
+  ISBN13 String 
 
-  @@id([BorrowInvoiceID,BookID]) 
+  @@id([BorrowInvoiceID,ISBN13]) 
 }
 
 model ChangeInvoice {
@@ -116,12 +115,12 @@ model ChangeDetail {
   Quantity Int
   ChangeType Int
 
-  Book Book @relation(fields: [BookID], references: [BookID])
-  BookID Int
+  Book Book @relation(fields: [ISBN13], references: [ISBN13])
+  ISBN13 String
 
   ChangeInvoice ChangeInvoice @relation(fields: [ChangeInvoiceID], references: [ChangeInvoiceID])
   ChangeInvoiceID Int
   
-  @@id([BookID,ChangeInvoiceID])
+  @@id([ISBN13,ChangeInvoiceID])
 }
 
