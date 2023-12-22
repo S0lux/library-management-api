@@ -19,6 +19,7 @@ model Member {
   Credit Int
   DateOfBirth DateTime
   Gender Int  
+  Deleted Boolean
 
   Employee Employee @relation(fields: [EmployeeID], references: [EmployeeID])
   EmployeeID Int
