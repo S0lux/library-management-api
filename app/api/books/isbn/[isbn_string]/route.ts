@@ -48,19 +48,16 @@ export async function DELETE(request: NextRequest, { params }: { params: { isbn_
     )
 
     try {
-        const deleteDetailsRegistries = await prisma.bookDetail.deleteMany({
+        const deleteBook = await prisma.book.update({
             where: {
                 ISBN13: params.isbn_string
-            }
-        })
-    
-        const deleteBookRegistry = await prisma.book.delete({
-            where: {
-                ISBN13: params.isbn_string
+            },
+            data: {
+                Deleted: true
             }
         })
 
-        return NextResponse.json(deleteDetailsRegistries.count + (deleteBookRegistry ? 1 : 0), { status: 200 })
+        return NextResponse.json(deleteBook, { status: 200 })
     }
     catch {
         return NextResponse.json({ error: "Unable to connect to database" }, { status: 500 })

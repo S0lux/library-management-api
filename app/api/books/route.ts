@@ -46,3 +46,19 @@ export async function POST(request: NextRequest) {
     }
 }
 
+export async function GET(request: NextRequest) {
+    try {
+        const books = await prisma.book.findMany({
+            where: {
+                Deleted: false
+            }
+        })
+    
+        if (books.length < 1) return NextResponse.json({error: "No book founds"}, { status: 404 })
+        return NextResponse.json({ data: books }, { status: 200 })
+    }
+    catch (error) {
+        console.log(error)
+        return NextResponse.json({ error: "Unknown error" }, { status: 500 })
+    }
+}
