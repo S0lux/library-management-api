@@ -21,7 +21,7 @@ export async function GET(request: NextRequest, { params }: { params: { title_st
                         Author: doc.author_name?.[0] || "Not found",
                         Title: doc.title,
                         ISBN13: book.isbn[0],
-                        PublishDate: new Date(book.publish_date[0]).toISOString()
+                        PublishDate: (book.publish_date?.[0]) ? new Date(book.publish_date[0]).toISOString() : new Date().toISOString()
                     })
                 }
             })

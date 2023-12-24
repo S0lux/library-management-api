@@ -23,7 +23,7 @@ export interface SearchResponse {
   }
   
   export interface Doc2 {
-    publish_date: string[]
+    publish_date?: string[]
     isbn?: string[]
   }
   
