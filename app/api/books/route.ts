@@ -39,18 +39,19 @@ export async function POST(request: NextRequest) {
             data: book
         })
 
-        const bookDetals = await prisma.bookDetail.createMany({
+        const bookDetails = await prisma.bookDetail.createMany({
             data: [
-                {Status: 'normal', Quantity: 0,ISBN13:inserted.ISBN13},
-                {Status: 'damaged', Quantity: 0,ISBN13:inserted.ISBN13},
-                {Status: 'borrowed', Quantity: 0,ISBN13:inserted.ISBN13},
-                {Status: 'lost', Quantity: 0,ISBN13:inserted.ISBN13}
+                {Status: 'normal', Quantity: 0,ISBN13: inserted.ISBN13},
+                {Status: 'damaged', Quantity: 0,ISBN13: inserted.ISBN13},
+                {Status: 'borrowed', Quantity: 0,ISBN13: inserted.ISBN13},
+                {Status: 'lost', Quantity: 0,ISBN13: inserted.ISBN13}
             ]}
         )
 
         return NextResponse.json(inserted, { status: 200 })
     }
-    catch {
+    catch (error) {
+        console.log(error)
         return NextResponse.json({ error: "Unable to connect to database" }, { status: 500 })
     }
 }
