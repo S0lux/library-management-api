@@ -73,6 +73,7 @@ model BookDetail {
   ISBN13 String
 
   @@id([Status,ISBN13])
+  @@unique([Status,ISBN13])
 }
 
 model BorrowInvoice {

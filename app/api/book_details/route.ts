@@ -24,8 +24,10 @@ export async function PUT(req: NextRequest) {
 
         const response = await prisma.bookDetail.update({
             where: {
-                ISBN13: bookDetailData.ISBN13,
-                Status: bookDetailData.Status
+                Status_ISBN13: {
+                    ISBN13: bookDetailData.ISBN13,
+                    Status: bookDetailData.Status
+                }
             },
             data: {
                 Quantity: bookDetailData.Quantity
