@@ -99,6 +99,8 @@ model BorrowDetail {
   Book Book @relation(fields: [ISBN13], references: [ISBN13])
   ISBN13 String 
 
+  HasReturned Boolean @default(false)
+
   @@id([BorrowInvoiceID,ISBN13]) 
 }
 

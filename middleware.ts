@@ -18,6 +18,7 @@ export async function middleware(request: Request) {
 
     // Create a new header
     const newHeader = new Headers(request.headers)
+    console.log("Username: ", payload.username)
     newHeader.set("username", payload.username)
     newHeader.set("token", jwtToken!)
 
@@ -29,5 +30,5 @@ export async function middleware(request: Request) {
 }
  
 export const config = {
-  matcher: ['/api/book/:path*', '/api/session/:path*', '/api/members/:path*']
+  matcher: ['/api/book/:path*', '/api/session/:path*', '/api/members/:path*', '/api/books/:path*']
 }
