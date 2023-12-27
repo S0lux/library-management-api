@@ -80,11 +80,8 @@ model BorrowInvoice {
   BorrowInvoiceID Int @id @default(autoincrement())
   BorrowingDate DateTime
 
-  Member Member @relation(fields: [MemberID], references: [MemberID])
-  MemberID Int  
-
-  Employee Employee @relation(fields:[EmployeeID], references: [EmployeeID])
-  EmployeeID Int 
+  Member Member[]
+  Employee Employee[]
 
   BorrowDetails BorrowDetail[]
 }

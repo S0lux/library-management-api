@@ -8,8 +8,10 @@ export async function GET(request: NextRequest) {
   try {
     const borrowInvoices = await prisma.borrowInvoice.findMany({
       include: {
-        BorrowDetails: true
-      }
+        BorrowDetails: true,
+        Member: true,
+        Employee: true,
+      },
     })
 
     if (borrowInvoices.length < 1) return NextResponse.json({ message: "No borrow invoices found" }, { status: 404 })
@@ -31,8 +33,16 @@ export async function POST(request: NextRequest) {
         const borrowInvoice = await prisma.borrowInvoice.create({
             data: {
               BorrowingDate: borrowRequest.BorrowingDate,
-              MemberID: borrowRequest.MemberID,
-              EmployeeID: borrowRequest.EmployeeID,
+              Member: {
+                connect: {
+                  MemberID: borrowRequest.MemberID
+                }
+              },
+              Employee: {
+                connect: {
+                  EmployeeID: borrowRequest.EmployeeID
+                }
+              },
               BorrowDetails: {
                 create: borrowRequest.BorrowDetails.map((detail) => ({
                   Quantity: detail.Quantity,

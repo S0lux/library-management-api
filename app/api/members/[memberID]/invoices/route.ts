@@ -6,16 +6,20 @@ const prisma = new PrismaClient();
 export async function GET(req: NextRequest, { params }: { params: { memberID: string } }) {
 
     try {
-        const invoices = await prisma.borrowInvoice.findMany({
+        const invoices = await prisma.member.findFirst({
             where: {
                 MemberID: Number(params.memberID)
             },
             include: {
-                BorrowDetails: true
+                BorrowInvoices: {
+                    include: {
+                        BorrowDetails: true
+                    }
+                }
             }
         })
 
-        if (invoices.length < 1) return NextResponse.json({ message: "No borrow invoices found for this member" }, { status: 404 })
+        if (!invoices) return NextResponse.json({ message: "No borrow invoices found for this member" }, { status: 404 })
 
         return NextResponse.json({ data: invoices }, { status: 200 })
     }
