@@ -1,4 +1,3 @@
-import { UpdateBookDetails } from "@/utils/bookDetailsUpdater";
 import { PrismaClient } from "@prisma/client";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -57,8 +56,34 @@ export async function POST(request: NextRequest) {
             },
           });
 
-        borrowRequest.BorrowDetails.forEach(borrowDetail => {
-          UpdateBookDetails(borrowDetail.ISBN13, 0, borrowDetail.Quantity, 0, 0)
+        await borrowRequest.BorrowDetails.forEach(async borrowDetail => {
+          await prisma.bookDetail.update({
+            where: {
+                Status_ISBN13: {
+                    Status: "normal",
+                    ISBN13: borrowDetail.ISBN13
+                }
+            },
+            data: {
+                Quantity: {
+                    decrement: borrowDetail.Quantity
+                }
+            }
+        })
+    
+        await prisma.bookDetail.update({
+            where: {
+                Status_ISBN13: {
+                    Status: "borrowed",
+                    ISBN13: borrowDetail.ISBN13
+                }
+            },
+            data: {
+                Quantity: {
+                    increment: borrowDetail.Quantity
+                }
+            }
+        })
         });
 
         return NextResponse.json({ data: borrowInvoice }, { status: 200 })
