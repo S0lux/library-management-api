@@ -88,6 +88,11 @@ model BorrowInvoice {
 
 model BorrowDetail {
   Quantity Int
+  
+  Returned Int @default(0)
+  Damaged Int @default(0)
+  Lost Int @default(0)
+
   DueDate DateTime
 
   BorrowInvoice BorrowInvoice @relation(fields: [BorrowInvoiceID], references: [BorrowInvoiceID])
