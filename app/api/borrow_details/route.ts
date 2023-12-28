@@ -99,6 +99,8 @@ export async function PUT(request: NextRequest) {
         newBorrowed += borrowDetails.Quantity - borrowDetails.Returned
     });
 
+    newBorrowed = newBorrowed - newLost - newDamaged
+
     await Prisma.bookDetail.update({
         where: {
             Status_ISBN13: {
