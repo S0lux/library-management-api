@@ -44,5 +44,5 @@ export async function middleware(request: Request) {
 }
  
 export const config = {
-  matcher: ['/api/book/:path*', '/api/session/:path*', '/api/members/:path*', '/api/books/:path*']
+  matcher: ['/api/book/:path*', '/api/session/:path*', '/api/members/:path*', '/api/books/:path*', 'api/logout']
 }
