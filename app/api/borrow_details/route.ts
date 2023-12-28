@@ -18,13 +18,6 @@ export async function PUT(request: NextRequest) {
     if (!body.InvoiceID || !body.ISBN13)
     return NextResponse.json({ error: "Invalid request body"}, { status: 400 })
 
-    const oldBorrowDetail = await Prisma.borrowDetail.findFirstOrThrow({
-        where: {
-            BorrowInvoiceID: body.InvoiceID,
-            ISBN13: body.ISBN13,
-        }
-    })
-
     const updatedBorrowDetail = await Prisma.borrowDetail.update({
         where: {
             BorrowInvoiceID_ISBN13: {
@@ -98,7 +91,6 @@ export async function PUT(request: NextRequest) {
 
     const borrowDetails = await Prisma.borrowDetail.findMany({
         where: {
-            BorrowInvoiceID: body.InvoiceID,
             ISBN13: body.ISBN13
         }
     })
