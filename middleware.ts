@@ -1,9 +1,24 @@
 import { NextResponse } from 'next/server'
 import { verifyToken } from './utils/jwtHandler'
+import { Redis } from '@upstash/redis'
+
+const redis = new Redis({
+    url: process.env.UPSTASH_URL!,
+    token: process.env.UPSTASH_KEY!,
+  })
  
 export async function middleware(request: Request) {
 
     const jwtToken = request.headers.get("Authorization")?.split(" ")[1]
+    
+    if (jwtToken == null) {
+        return NextResponse.json({ error: "No token provided" }, { status: 401 })
+    }
+
+    // Check if token is in blacklist
+    const inBlacklist = await redis.get(`bl_${jwtToken}`)
+    if (inBlacklist) return NextResponse.json({ error: "Token rejected" }, { status: 401 })
+
     let payload
 
     // Authentication with JWT
@@ -17,9 +32,9 @@ export async function middleware(request: Request) {
 
     // Create a new header
     const newHeader = new Headers(request.headers)
-    console.log("Username: ", payload.username)
     newHeader.set("username", payload.username)
     newHeader.set("token", jwtToken!)
+    newHeader.set("exp", payload.exp)
 
     return NextResponse.next({
         request: {
