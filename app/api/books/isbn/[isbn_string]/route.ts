@@ -14,22 +14,27 @@ export async function GET(request: NextRequest, { params }: { params: { isbn_str
     })
 
     if (fetchBookResult.status != 200) {
-        return NextResponse.json( { error: fetchBookResult.statusText }, { status: fetchBookResult.status } );
+        return NextResponse.json({ error: fetchBookResult.statusText }, { status: fetchBookResult.status });
     }
 
     const bookResultJson = await fetchBookResult.json();
 
-    const fetchAuthorResult = await fetch(`https://openlibrary.org/${bookResultJson.authors[0].key}.json`, {
-        method: "GET",
-        headers: {
-            "Accept": "application/json"
-        }
-    })
+    let authorName
 
-    const authorName = fetchAuthorResult.status == 200 ? (await fetchAuthorResult.json()).name : "undefined"
+    if (bookResultJson.authors?.[0]) {
+        const fetchAuthorResult = await fetch(`https://openlibrary.org/${bookResultJson.authors[0].key}.json`, {
+            method: "GET",
+            headers: {
+                "Accept": "application/json"
+            }
+        })
+
+        authorName = fetchAuthorResult.status == 200 ? (await fetchAuthorResult.json()).name : "undefined"
+    }
+    else authorName = "Unknown"
 
     const responseData: { data: book } = {
-        data : {
+        data: {
             ISBN13: bookResultJson.isbn_13[0],
             PublishDate: new Date(bookResultJson.publish_date).toISOString(),
             Title: bookResultJson.title,
@@ -37,7 +42,7 @@ export async function GET(request: NextRequest, { params }: { params: { isbn_str
         }
     }
 
-    return NextResponse.json(responseData, {status: 200})
+    return NextResponse.json(responseData, { status: 200 })
 }
 
 export async function DELETE(request: NextRequest, { params }: { params: { isbn_string: string } }) {
