@@ -53,6 +53,19 @@ export async function PUT(request: NextRequest) {
             }
         })
     }
+    else {
+        const updatedBorrowDetail = await Prisma.borrowDetail.update({
+            where: {
+                BorrowInvoiceID_ISBN13: {
+                    BorrowInvoiceID: body.InvoiceID,
+                    ISBN13: body.ISBN13,
+                }
+            },
+            data: {
+                HasReturned: false
+            }
+        })
+    }
 
     // Update book details
     const normal = await Prisma.bookDetail.findFirstOrThrow({
