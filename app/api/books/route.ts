@@ -72,3 +72,25 @@ export async function GET(request: NextRequest) {
         return NextResponse.json({ error: "Unknown error" }, { status: 500 })
     }
 }
+
+export async function PUT(req: NextRequest) {
+    try {
+        const body = await req.json();
+        const bookData = body.data;
+
+        const response = await prisma.book.update({
+            where: {
+                ISBN13: bookData.ISBN13,
+            },
+            data: {
+                Deleted: bookData.Deleted
+            }
+        })
+
+        return NextResponse.json(response, { status: 200 })
+    }
+    catch (error) {
+        console.log(error)
+        return NextResponse.json({ error: "Unable to update a book detail record using the book detail object provided" }, { status: 400 })
+    }
+}
