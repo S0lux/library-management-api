@@ -16,7 +16,7 @@ export async function PUT(request: NextRequest) {
     }
     
 
-    if (!body.InvoiceID || !body.ISBN13 || !body.Returned || !body.Damaged || !body.Lost)
+    if (!body.InvoiceID || !body.ISBN13)
     return NextResponse.json({ error: "Invalid request body"}, { status: 400 })
 
     const updatedBorrowDetail = await Prisma.borrowDetail.update({
@@ -48,4 +48,6 @@ export async function PUT(request: NextRequest) {
     }
 
     UpdateBookDetails(body.ISBN13, body.Returned, body.Quantity, body.Damaged, body.Lost)
+
+    return NextResponse.json(updatedBorrowDetail, { status: 200 })
 }
