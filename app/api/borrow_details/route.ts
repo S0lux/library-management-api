@@ -78,7 +78,7 @@ export async function PUT(request: NextRequest) {
         },
         data: {
             Quantity: {
-                decrement: oldBorrowDetail.Quantity - body.Quantity - body.Returned
+                decrement: oldBorrowDetail.Quantity - body.Quantity + body.Returned
             }
         }
     })
