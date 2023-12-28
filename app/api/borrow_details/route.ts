@@ -55,6 +55,50 @@ export async function PUT(request: NextRequest) {
     }
 
     // Update book details
+    const normal = await Prisma.bookDetail.findFirstOrThrow({
+        where: {
+            Status: "normal",
+            ISBN13: body.ISBN13
+        } 
+    })
+
+    const borrowed = await Prisma.bookDetail.findFirstOrThrow({
+        where: {
+            Status: "borrowed",
+            ISBN13: body.ISBN13
+        } 
+    })
+
+    const damaged = await Prisma.bookDetail.findFirstOrThrow({
+        where: {
+            Status: "damaged",
+            ISBN13: body.ISBN13
+        } 
+    })
+
+    const lost = await Prisma.bookDetail.findFirstOrThrow({
+        where: {
+            Status: "lost",
+            ISBN13: body.ISBN13
+        } 
+    })
+
+    const borrowDetails = await Prisma.borrowDetail.findMany({
+        where: {
+            BorrowInvoiceID: body.InvoiceID,
+            ISBN13: body.ISBN13
+        }
+    })
+
+    let total = normal.Quantity + borrowed.Quantity + damaged.Quantity + lost.Quantity
+    let newLost = 0, newDamaged = 0, newBorrowed = 0
+
+    borrowDetails.forEach(borrowDetails => {
+        newLost += borrowDetails.Lost
+        newDamaged += borrowDetails.Damaged
+        newBorrowed += borrowDetails.Quantity - borrowDetails.Returned
+    });
+
     await Prisma.bookDetail.update({
         where: {
             Status_ISBN13: {
@@ -63,9 +107,7 @@ export async function PUT(request: NextRequest) {
             }
         },
         data: {
-            Quantity: {
-                decrement: oldBorrowDetail.Returned - body.Returned
-            }
+            Quantity: total - newLost - newDamaged - newBorrowed
         }
     })
 
@@ -77,23 +119,7 @@ export async function PUT(request: NextRequest) {
             }
         },
         data: {
-            Quantity: {
-                decrement: oldBorrowDetail.Quantity - body.Quantity + body.Returned
-            }
-        }
-    })
-
-    await Prisma.bookDetail.update({
-        where: {
-            Status_ISBN13: {
-                Status: "lost",
-                ISBN13: body.ISBN13
-            }
-        },
-        data: {
-            Quantity: {
-                decrement: oldBorrowDetail.Lost - body.Lost
-            }
+            Quantity: newBorrowed
         }
     })
 
@@ -105,9 +131,19 @@ export async function PUT(request: NextRequest) {
             }
         },
         data: {
-            Quantity: {
-                decrement: oldBorrowDetail.Damaged - body.Damaged
+            Quantity: newDamaged
+        }
+    })
+
+    await Prisma.bookDetail.update({
+        where: {
+            Status_ISBN13: {
+                Status: "lost",
+                ISBN13: body.ISBN13
             }
+        },
+        data: {
+            Quantity: newLost
         }
     })
 
