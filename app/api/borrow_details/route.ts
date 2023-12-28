@@ -119,7 +119,7 @@ export async function PUT(request: NextRequest) {
             }
         },
         data: {
-            Quantity: newBorrowed
+            Quantity: newBorrowed - newLost - newDamaged
         }
     })
 
