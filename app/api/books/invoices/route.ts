@@ -1,3 +1,4 @@
+import { UpdateBookDetails } from "@/utils/bookDetailsUpdater";
 import { PrismaClient } from "@prisma/client";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -55,6 +56,10 @@ export async function POST(request: NextRequest) {
               BorrowDetails: true,
             },
           });
+
+        borrowRequest.BorrowDetails.forEach(borrowDetail => {
+          UpdateBookDetails(borrowDetail.ISBN13, 0, borrowDetail.Quantity, 0, 0)
+        });
 
         return NextResponse.json({ data: borrowInvoice }, { status: 200 })
     }
