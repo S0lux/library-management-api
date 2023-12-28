@@ -64,7 +64,7 @@ export async function PUT(request: NextRequest) {
         },
         data: {
             Quantity: {
-                decrement: oldBorrowDetail.Returned + body.Returned
+                decrement: oldBorrowDetail.Returned - body.Returned
             }
         }
     })
@@ -78,7 +78,7 @@ export async function PUT(request: NextRequest) {
         },
         data: {
             Quantity: {
-                decrement: oldBorrowDetail.Quantity + body.Quantity
+                decrement: oldBorrowDetail.Quantity - body.Quantity - body.Returned
             }
         }
     })
@@ -92,7 +92,7 @@ export async function PUT(request: NextRequest) {
         },
         data: {
             Quantity: {
-                decrement: oldBorrowDetail.Lost + body.Lost
+                decrement: oldBorrowDetail.Lost - body.Lost
             }
         }
     })
@@ -106,7 +106,7 @@ export async function PUT(request: NextRequest) {
         },
         data: {
             Quantity: {
-                decrement: oldBorrowDetail.Damaged + body.Damaged
+                decrement: oldBorrowDetail.Damaged - body.Damaged
             }
         }
     })
