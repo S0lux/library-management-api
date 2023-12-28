@@ -96,10 +96,8 @@ export async function PUT(request: NextRequest) {
     borrowDetails.forEach(borrowDetails => {
         newLost += borrowDetails.Lost
         newDamaged += borrowDetails.Damaged
-        newBorrowed += borrowDetails.Quantity - borrowDetails.Returned
+        newBorrowed += borrowDetails.Quantity - borrowDetails.Returned - borrowDetails.Lost - borrowDetails.Damaged
     });
-
-    newBorrowed = newBorrowed - newLost - newDamaged
 
     await Prisma.bookDetail.update({
         where: {
@@ -121,7 +119,7 @@ export async function PUT(request: NextRequest) {
             }
         },
         data: {
-            Quantity: newBorrowed - newLost - newDamaged
+            Quantity: newBorrowed
         }
     })
 
