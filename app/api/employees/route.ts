@@ -34,7 +34,7 @@ export async function POST(req: NextRequest) {
         let employeeData = body.data;
         employeeData.DateOfBirth = new Date(employeeData.DateOfBirth)
 
-        const response = await prisma.member.create({
+        const response = await prisma.employee.create({
             data: employeeData
         })
 
