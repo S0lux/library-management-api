@@ -21,7 +21,7 @@ export async function GET(req: NextRequest) {
 
         return NextResponse.json(response, { status: 200 })}
 
-        return NextResponse.json({ error: "Permission denied" }, { status: 401 })
+        return NextResponse.json({ error: "Permission denied" }, { status: 403 })
     }
     catch {
         return NextResponse.json({ error: "Unknown error" }, { status: 500 })
