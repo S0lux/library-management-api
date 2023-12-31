@@ -46,11 +46,17 @@ export async function POST(req: NextRequest) {
             data: employeeData
         })
 
+        const accountOwner = await prisma.employee.findFirst({
+            where:{
+                CitizenID: employeeData.CitizenID
+            }
+        })
+
         await prisma.account.create({
             data:{
                 Owner:{
                     connect: {
-                        EmployeeID: employeeData.EmployeeID
+                        EmployeeID: accountOwner?.EmployeeID
                     }
                 },
                 Username: accountData.Username,
