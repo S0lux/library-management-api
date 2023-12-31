@@ -37,7 +37,8 @@ export async function POST(req: NextRequest) {
 export async function PUT(req: NextRequest) {
     try {
         const body = await req.json();
-        const memberData = body.data;
+        let memberData = body.data;
+        memberData.DateOfBirth = new Date(memberData.DateOfBirth)
 
         const response = await prisma.member.update({
             where: {
