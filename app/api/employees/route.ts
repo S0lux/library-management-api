@@ -16,7 +16,11 @@ export async function GET(req: NextRequest) {
         if(accCheck?.AccessLevel == 3){
 
         const response = {
-            data: await prisma.employee.findMany()
+            data: await prisma.employee.findMany({
+                include: {
+                    Account: true
+                } 
+            })
         }
 
         return NextResponse.json(response, { status: 200 })}
