@@ -36,12 +36,29 @@ export async function GET(req: NextRequest) {
 export async function POST(req: NextRequest) {
     try {
         const body = await req.json();
+
         let employeeData = body.data;
         employeeData.DateOfBirth = new Date(employeeData.DateOfBirth)
+
+        let accountData = body.accountData
 
         const response = await prisma.employee.create({
             data: employeeData
         })
+
+        await prisma.account.create({
+            data:{
+                Owner:{
+                    connect: {
+                        EmployeeID: employeeData.EmployeeID
+                    }
+                },
+                Username: accountData.Username,
+                Password: accountData.Password,
+                AccessLevel: 1,
+            }
+        })
+
 
         return NextResponse.json(response, { status: 200 })
     }
@@ -57,11 +74,23 @@ export async function PUT(req: NextRequest) {
         let employeeData = body.data;
         employeeData.DateOfBirth = new Date(employeeData.DateOfBirth)
 
+        let accountData = body.accountData
+
         const response = await prisma.employee.update({
             where: {
                 EmployeeID: employeeData.EmployeeID
             },
             data: employeeData
+        })
+
+        await prisma.account.update({
+            where:{
+                OwnerID: employeeData.EmployeeID
+            },
+            data:{
+                Username: accountData.Username,
+                Password: accountData.Password
+            } 
         })
 
         return NextResponse.json(response, { status: 200 })

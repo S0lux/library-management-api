@@ -6,12 +6,20 @@ const prisma = new PrismaClient();
 export async function DELETE(req: NextRequest, { params }: { params: { employeeID: string } }) {
     try {
 
+        const employeeID = Number.parseInt(params.employeeID)
+
         const response = await prisma.employee.update({
             where: {
-                EmployeeID: Number.parseInt(params.employeeID)
+                EmployeeID: employeeID
             },
             data: {
                 Deleted: true
+            }
+        })
+
+        await prisma.account.delete({
+            where:{
+                OwnerID: employeeID
             }
         })
 
