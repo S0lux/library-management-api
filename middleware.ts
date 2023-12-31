@@ -47,5 +47,5 @@ export const config = {
   matcher: ['/api/book/:path*', '/api/session/:path*', 
             '/api/members/:path*', '/api/books/:path*',
             '/api/logout/:path*', '/api/book_details/:path*',
-            '/api/borrow_details/:path*']
+            '/api/borrow_details/:path*','/api/employees/:path*']
 }
