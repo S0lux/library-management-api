@@ -5,25 +5,26 @@ const prisma = new PrismaClient();
 
 export async function GET(req: NextRequest) {
     try {
-        const userName =  req.headers.get("username");
-        
-        if(userName == null){
+        const userName = req.headers.get("username");
+
+        if (userName == null) {
             return NextResponse.json({ error: "Token not found" }, { status: 404 })
         }
 
-        const accCheck = await prisma.account.findFirst({where: {Username: userName}});
+        const accCheck = await prisma.account.findFirst({ where: { Username: userName } });
 
-        if(accCheck?.AccessLevel == 3){
+        if (accCheck?.AccessLevel == 3) {
 
-        const response = {
-            data: await prisma.employee.findMany({
+            const response = {
+                data: await prisma.employee.findMany({
                 include: {
                     Account: true
                 } 
             })
-        }
+            }
 
-        return NextResponse.json(response, { status: 200 })}
+            return NextResponse.json(response, { status: 200 })
+        }
 
         return NextResponse.json({ error: "Permission denied" }, { status: 403 })
     }
@@ -53,7 +54,8 @@ export async function POST(req: NextRequest) {
 export async function PUT(req: NextRequest) {
     try {
         const body = await req.json();
-        const employeeData = body.data;
+        let employeeData = body.data;
+        employeeData.DateOfBirth = new Date(employeeData.DateOfBirth)
 
         const response = await prisma.employee.update({
             where: {
