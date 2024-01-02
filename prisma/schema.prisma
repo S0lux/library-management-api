@@ -60,6 +60,7 @@ model Book {
   Title String
   Author String
   PublishDate DateTime
+  Shelf Int @default(0)
   Deleted Boolean @default(false)
 
   BookDetails BookDetail[]
