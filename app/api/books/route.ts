@@ -83,7 +83,8 @@ export async function PUT(req: NextRequest) {
                 ISBN13: bookData.ISBN13,
             },
             data: {
-                Deleted: bookData.Deleted
+                Deleted: bookData.Deleted,
+                Shelf: bookData.Shelf
             }
         })
 
