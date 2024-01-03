@@ -2,6 +2,7 @@ import { book } from "@/types/book";
 import { PrismaClient } from "@prisma/client";
 import { NextRequest, NextResponse } from "next/server";
 
+const ISBN = require('isbn3')
 const prisma = new PrismaClient()
 
 export async function GET(request: NextRequest, { params }: { params: { isbn_string: string } }) {
@@ -33,9 +34,11 @@ export async function GET(request: NextRequest, { params }: { params: { isbn_str
     }
     else authorName = "Unknown"
 
+    const parsedISBN13 = ISBN.parse(bookResultJson.isbn_13?.[0] || bookResultJson.isbn_10?.[0]).isbn13
+
     const responseData: { data: book } = {
         data: {
-            ISBN13: bookResultJson.isbn_13[0],
+            ISBN13: parsedISBN13,
             PublishDate: new Date(bookResultJson.publish_date).toISOString(),
             Title: bookResultJson.title,
             Author: authorName
