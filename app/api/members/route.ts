@@ -26,7 +26,7 @@ export async function POST(req: NextRequest) {
             data: memberData
         })
         
-        const generatedHistory = await prisma.history.create({
+        const generatedHistory = await prisma.historyLogs.create({
             data: {
                 Date: new Date().toISOString(),
                 Action: "CREATE",
@@ -56,7 +56,7 @@ export async function PUT(req: NextRequest) {
             data: memberData
         })
 
-        const generatedHistory = await prisma.history.create({
+        const generatedHistory = await prisma.historyLogs.create({
             data: {
                 Date: new Date().toISOString(),
                 Action: "UPDATE",

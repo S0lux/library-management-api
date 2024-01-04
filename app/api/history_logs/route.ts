@@ -5,7 +5,7 @@ const prisma = new PrismaClient();
 
 export async function GET(req: NextRequest) {
     try {
-        const history = await prisma.history.findMany({
+        const history = await prisma.historyLogs.findMany({
             orderBy: {
                 Date: "desc"
             }

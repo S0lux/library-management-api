@@ -39,7 +39,7 @@ export async function POST(request: NextRequest) {
             data: book
         })
 
-        const generatedHistory = await prisma.history.create({
+        const generatedHistory = await prisma.historyLogs.create({
             data: {
                 Date: new Date().toISOString(),
                 Action: "CREATE",

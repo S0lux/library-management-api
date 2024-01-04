@@ -34,7 +34,7 @@ export async function PUT(req: NextRequest) {
             }
         })
 
-        const generatedHistory = await prisma.history.create({
+        const generatedHistory = await prisma.historyLogs.create({
             data: {
                 Date: new Date().toISOString(),
                 Action: "UPDATE",

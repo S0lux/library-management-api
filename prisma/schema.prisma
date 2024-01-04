@@ -46,7 +46,6 @@ model Account {
   AccessLevel Int
   OwnerID     Int       @unique
   Owner       Employee  @relation(fields: [OwnerID], references: [EmployeeID])
-  History     History[]
 }
 
 model Book {
@@ -114,11 +113,10 @@ model ChangeDetail {
   @@id([ISBN13, ChangeInvoiceID])
 }
 
-model History {
+model HistoryLogs {
   HistoryID       Int      @id @default(autoincrement())
   Date            DateTime
   Action          String
   ActionDetails   String
   AccountUsername String
-  Account         Account  @relation(fields: [AccountUsername], references: [Username])
 }
