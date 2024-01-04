@@ -48,5 +48,5 @@ export const config = {
             '/api/members/:path*', '/api/books/:path*',
             '/api/logout/:path*', '/api/book_details/:path*',
             '/api/borrow_details/:path*','/api/employees/:path*', 
-            '/api/history/:path*']
+            '/api/history_logs/:path*']
 }
