@@ -60,7 +60,7 @@ export async function PUT(req: NextRequest) {
             data: {
                 Date: new Date().toISOString(),
                 Action: "UPDATE",
-                ActionDetails: "Cập nhật thành viên với mã thành viên " + memberData.MemberID,
+                ActionDetails: "Cập nhật thành viên với mã thành viên " + response.MemberID,
                 AccountUsername: req.headers.get("username") || "Unknown"
             }
         })
