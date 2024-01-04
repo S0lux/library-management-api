@@ -30,7 +30,7 @@ export async function POST(req: NextRequest) {
             data: {
                 Date: new Date().toISOString(),
                 Action: "CREATE",
-                ActionDetails: "Thêm thành viên mới với mã thành viên " + memberData.MemberID,
+                ActionDetails: "Thêm thành viên mới với mã thành viên " + response.MemberID,
                 AccountUsername: req.headers.get("username") || "Unknown"
             }
         })
