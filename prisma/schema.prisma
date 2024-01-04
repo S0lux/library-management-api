@@ -1,6 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -11,125 +8,117 @@ datasource db {
 }
 
 model Member {
-  MemberID Int @id @default(autoincrement())
-  CitizenID String @unique
-  Name String
-  Address String
-  PhoneNumber String
-  Credit Int
-  DateOfBirth DateTime
-  Gender Int  
-  JoinDate DateTime @default(now())
-  Deleted Boolean @default(false)
-
-  Employee Employee @relation(fields: [EmployeeID], references: [EmployeeID])
-  EmployeeID Int
-
-  BorrowInvoices BorrowInvoice[]
+  MemberID       Int             @id @default(autoincrement())
+  CitizenID      String          @unique
+  Name           String
+  Address        String
+  PhoneNumber    String
+  Credit         Int
+  DateOfBirth    DateTime
+  EmployeeID     Int
+  Gender         Int
+  Deleted        Boolean         @default(false)
+  JoinDate       DateTime        @default(now())
+  Employee       Employee        @relation(fields: [EmployeeID], references: [EmployeeID])
+  BorrowInvoices BorrowInvoice[] @relation("BorrowInvoiceToMember")
 }
 
 model Employee {
-  EmployeeID Int @id @default(autoincrement())
-  Name String
-  Address String
-  PhoneNumber String
-  DateOfBirth DateTime
-  Gender Int
-  Email String
-  CitizenID String
-  Deleted Boolean @default(false)
-
-  Account Account?
-  Member Member[]
-  BorrowInvoices BorrowInvoice[]
+  Address        String
+  DateOfBirth    DateTime
+  EmployeeID     Int             @id @default(autoincrement())
+  Name           String
+  PhoneNumber    String
+  CitizenID      String
+  Email          String
+  Gender         Int
+  Deleted        Boolean         @default(false)
+  Account        Account?
   ChangeInvoices ChangeInvoice[]
+  Member         Member[]
+  BorrowInvoices BorrowInvoice[] @relation("BorrowInvoiceToEmployee")
 }
 
 model Account {
-  AccountID Int @id @default(autoincrement())
-  Username String @unique 
-  Password String
+  AccountID   Int       @id @default(autoincrement())
+  Username    String    @unique
+  Password    String
   AccessLevel Int
-
-  Owner Employee @relation(fields: [OwnerID], references: [EmployeeID])
-  OwnerID Int @unique
+  OwnerID     Int       @unique
+  Owner       Employee  @relation(fields: [OwnerID], references: [EmployeeID])
+  History     History[]
 }
 
 model Book {
-  ISBN13 String @unique @id
-  Title String
-  Author String
-  PublishDate DateTime
-  Shelf Int @default(0)
-  Deleted Boolean @default(false)
-
-  BookDetails BookDetail[]
+  Title         String
+  Author        String
+  ISBN13        String         @id @unique
+  PublishDate   DateTime
+  Deleted       Boolean        @default(false)
+  Shelf         Int            @default(0)
+  BookDetails   BookDetail[]
   BorrowDetails BorrowDetail[]
   ChangeDetails ChangeDetail[]
 }
 
 model BookDetail {
-  Status String 
+  Status   String
   Quantity Int
+  ISBN13   String
+  Book     Book   @relation(fields: [ISBN13], references: [ISBN13])
 
-  Book Book @relation(fields: [ISBN13],references: [ISBN13])
-  ISBN13 String
-
-  @@id([Status,ISBN13])
-  @@unique([Status,ISBN13])
+  @@id([Status, ISBN13])
+  @@unique([Status, ISBN13])
 }
 
 model BorrowInvoice {
-  BorrowInvoiceID Int @id @default(autoincrement())
-  BorrowingDate DateTime
-
-  Member Member[]
-  Employee Employee[]
-
-  BorrowDetails BorrowDetail[]
+  BorrowInvoiceID Int            @id @default(autoincrement())
+  BorrowingDate   DateTime
+  BorrowDetails   BorrowDetail[]
+  Employee        Employee[]     @relation("BorrowInvoiceToEmployee")
+  Member          Member[]       @relation("BorrowInvoiceToMember")
 }
 
 model BorrowDetail {
-  Quantity Int
-  
-  Returned Int @default(0)
-  Damaged Int @default(0)
-  Lost Int @default(0)
+  Quantity        Int
+  DueDate         DateTime
+  BorrowInvoiceID Int
+  ISBN13          String
+  HasReturned     Boolean       @default(false)
+  Damaged         Int           @default(0)
+  Lost            Int           @default(0)
+  Returned        Int           @default(0)
+  BorrowInvoice   BorrowInvoice @relation(fields: [BorrowInvoiceID], references: [BorrowInvoiceID])
+  Book            Book          @relation(fields: [ISBN13], references: [ISBN13])
 
-  DueDate DateTime
-
-  BorrowInvoice BorrowInvoice @relation(fields: [BorrowInvoiceID], references: [BorrowInvoiceID])
-  BorrowInvoiceID Int 
-
-  Book Book @relation(fields: [ISBN13], references: [ISBN13])
-  ISBN13 String 
-
-  HasReturned Boolean @default(false)
-
-  @@id([BorrowInvoiceID,ISBN13]) 
+  @@id([BorrowInvoiceID, ISBN13])
 }
 
 model ChangeInvoice {
-  ChangeInvoiceID Int @id @default(autoincrement())
-  ChangeDate DateTime
-
-  Employee Employee @relation(fields: [EmployeeID], references: [EmployeeID])
-  EmployeeID Int
-
-  ChangeDetail ChangeDetail[]
+  ChangeInvoiceID Int            @id @default(autoincrement())
+  ChangeDate      DateTime
+  EmployeeID      Int
+  ChangeDetail    ChangeDetail[]
+  Employee        Employee       @relation(fields: [EmployeeID], references: [EmployeeID])
 }
 
 model ChangeDetail {
-  Partner String
-  Quantity Int
-  ChangeType Int
-
-  Book Book @relation(fields: [ISBN13], references: [ISBN13])
-  ISBN13 String
-
-  ChangeInvoice ChangeInvoice @relation(fields: [ChangeInvoiceID], references: [ChangeInvoiceID])
+  Partner         String
+  Quantity        Int
+  ChangeType      Int
   ChangeInvoiceID Int
-  
-  @@id([ISBN13,ChangeInvoiceID])
+  ISBN13          String
+  ChangeInvoice   ChangeInvoice @relation(fields: [ChangeInvoiceID], references: [ChangeInvoiceID])
+  Book            Book          @relation(fields: [ISBN13], references: [ISBN13])
+
+  @@id([ISBN13, ChangeInvoiceID])
 }
 
+model History {
+  HistoryID       Int      @id @default(autoincrement())
+  Date            DateTime
+  Action          String
+  ActionDetails   String
+  AccountUsername String
+  Account         Account  @relation(fields: [AccountUsername], references: [Username])
+}

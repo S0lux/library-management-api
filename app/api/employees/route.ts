@@ -65,6 +65,15 @@ export async function POST(req: NextRequest) {
             }
         })
 
+        const generatedHistory = await prisma.history.create({
+            data: {
+                Date: new Date().toISOString(),
+                Action: "CREATE",
+                ActionDetails: "Thêm nhân viên mới với mã nhân viên " + response.EmployeeID,
+                AccountUsername: req.headers.get("username") || "Unknown"
+            }
+        })
+
 
         return NextResponse.json(response, { status: 200 })
     }

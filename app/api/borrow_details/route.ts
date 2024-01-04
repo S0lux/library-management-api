@@ -32,6 +32,15 @@ export async function PUT(request: NextRequest) {
         }
     })
 
+    const generatedHistory = await Prisma.history.create({
+        data: {
+            Date: new Date().toISOString(),
+            Action: "UPDATE",
+            ActionDetails: "Cập nhật chi tiết phiếu mượn với mã phiếu mượn " + body.InvoiceID + " và ISBN13 " + body.ISBN13,
+            AccountUsername: request.headers.get("username") || "Unknown"
+        }
+    })
+
     // Update HasReturned
     if (updatedBorrowDetail.Quantity == body.Returned + body.Lost + body.Damaged) {
         const updatedBorrowDetail = await Prisma.borrowDetail.update({

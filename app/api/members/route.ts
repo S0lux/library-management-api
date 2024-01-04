@@ -25,6 +25,15 @@ export async function POST(req: NextRequest) {
         const response = await prisma.member.create({
             data: memberData
         })
+        
+        const generatedHistory = await prisma.history.create({
+            data: {
+                Date: new Date().toISOString(),
+                Action: "CREATE",
+                ActionDetails: "Thêm thành viên mới với mã thành viên " + memberData.MemberID,
+                AccountUsername: req.headers.get("username") || "Unknown"
+            }
+        })
 
         return NextResponse.json(response, { status: 200 })
     }
@@ -45,6 +54,15 @@ export async function PUT(req: NextRequest) {
                 MemberID: memberData.MemberID
             },
             data: memberData
+        })
+
+        const generatedHistory = await prisma.history.create({
+            data: {
+                Date: new Date().toISOString(),
+                Action: "UPDATE",
+                ActionDetails: "Cập nhật thành viên với mã thành viên " + memberData.MemberID,
+                AccountUsername: req.headers.get("username") || "Unknown"
+            }
         })
 
         return NextResponse.json(response, { status: 200 })

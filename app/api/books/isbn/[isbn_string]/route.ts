@@ -65,6 +65,16 @@ export async function DELETE(request: NextRequest, { params }: { params: { isbn_
             }
         })
 
+        const generatedHistory = await prisma.history.create({
+            data: {
+                Date: new Date().toISOString(),
+                Action: "DELETE",
+                ActionDetails: "Xóa sách với ISBN13 " + deleteBook.ISBN13,
+                AccountUsername: request.headers.get("username") || "Unknown"
+            }
+        
+        })
+
         return NextResponse.json(deleteBook, { status: 200 })
     }
     catch {

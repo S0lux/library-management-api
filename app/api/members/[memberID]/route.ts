@@ -15,6 +15,16 @@ export async function DELETE(req: NextRequest, { params }: { params: { memberID:
             }
         })
 
+        const generatedHistory = await prisma.history.create({
+            data: {
+                Date: new Date().toISOString(),
+                Action: "DELETE",
+                ActionDetails: "Xóa thành viên với mã thành viên " + params.memberID,
+                AccountUsername: req.headers.get("username") || "Unknown"
+            }
+        
+        })
+
         return NextResponse.json(response, { status: 200 })
     }
     catch (error) {

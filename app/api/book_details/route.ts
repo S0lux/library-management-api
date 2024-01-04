@@ -34,6 +34,15 @@ export async function PUT(req: NextRequest) {
             }
         })
 
+        const generatedHistory = await prisma.history.create({
+            data: {
+                Date: new Date().toISOString(),
+                Action: "UPDATE",
+                ActionDetails: "Cập nhật sách với ISBN13 " + bookDetailData.ISBN13 + " số lượng thành " + bookDetailData.Quantity + ` (Tình trạng: ${bookDetailData.Status})`,
+                AccountUsername: req.headers.get("username") || "Unknown"
+            }
+        })
+
         return NextResponse.json(response, { status: 200 })
     }
     catch (error) {

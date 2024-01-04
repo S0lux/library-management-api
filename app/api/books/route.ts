@@ -39,6 +39,15 @@ export async function POST(request: NextRequest) {
             data: book
         })
 
+        const generatedHistory = await prisma.history.create({
+            data: {
+                Date: new Date().toISOString(),
+                Action: "CREATE",
+                ActionDetails: "Thêm sách mới với ISBN13 " + inserted.ISBN13,
+                AccountUsername: request.headers.get("username") || "Unknown"
+            }
+        })
+
         const bookDetails = await prisma.bookDetail.createMany({
             data: [
                 {Status: 'normal', Quantity: 0, ISBN13: inserted.ISBN13},

@@ -17,6 +17,15 @@ export async function DELETE(req: NextRequest, { params }: { params: { employeeI
             }
         })
 
+        const generatedHistory = await prisma.history.create({
+            data: {
+                Date: new Date().toISOString(),
+                Action: "DELETE",
+                ActionDetails: "Xóa nhân viên với mã nhân viên " + employeeID,
+                AccountUsername: req.headers.get("username") || "Unknown"
+            }
+        })
+
         await prisma.account.delete({
             where:{
                 OwnerID: employeeID

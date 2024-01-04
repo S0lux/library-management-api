@@ -56,6 +56,15 @@ export async function POST(request: NextRequest) {
             },
           });
 
+        const generatedHistory = await prisma.history.create({
+            data: {
+                Date: new Date().toISOString(),
+                Action: "CREATE",
+                ActionDetails: `Tạo phiếu mượn (ID: ${borrowInvoice.BorrowInvoiceID})`,
+                AccountUsername: request.headers.get("username") || "Unknown"
+            }
+        })
+
         await borrowRequest.BorrowDetails.forEach(async borrowDetail => {
           await prisma.bookDetail.update({
             where: {
