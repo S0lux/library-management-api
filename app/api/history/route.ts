@@ -5,11 +5,9 @@ const prisma = new PrismaClient();
 
 export async function GET(req: NextRequest) {
     try {
-        const response = {
-            data: await prisma.history.findMany()
-        }
+        const history = await prisma.history.findMany();
 
-        return NextResponse.json(response, { status: 200 })
+        return NextResponse.json({ data: history }, { status: 200 })
     }
     catch {
         return NextResponse.json({ error: "Unknown error" }, { status: 500 })
